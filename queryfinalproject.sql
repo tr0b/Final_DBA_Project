@@ -73,7 +73,8 @@ GO
 CREATE TABLE Moneda(
 	ID INT PRIMARY KEY IDENTITY(1,1)
 	,Nombre nvarchar(50)
-	,IsoAlpha3 nvarchar(3) -- E.g. USD, ASD, CRC, EUR, )
+	,IsoAlpha3 nvarchar(3) -- E.g. USD, ASD, CRC, EUR,
+)
 GO
 /*Creacion Tabla Agencia*/
 CREATE TABLE Agencia(
@@ -100,7 +101,7 @@ CREATE TABLE Ingreso(
 	,Monto money
 	,Planilla BIT
 	,FK_Persona_ID INT
-	,FK_Tipo_Ingreso_ID INT
+	,FK_Tipo_Ingreso_ID TINYINT
 	,CONSTRAINT FK_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
 	,CONSTRAINT FK_Tipo_Ingreso FOREIGN KEY (FK_Tipo_Ingreso_ID) REFERENCES Tipo_Ingreso(ID) 
 )
@@ -116,13 +117,13 @@ CREATE TABLE Geografia(
 	ID INT PRIMARY KEY IDENTITY(1,1)
 	,Nombre nvarchar(50)
 	,FK_GeografiaID INT
-	,FK_TipoGeografiaID TINYINT
+	,FK_Tipo_Geografia_ID TINYINT
 	,CONSTRAINT FK_Tipo_Geografia FOREIGN KEY (FK_Tipo_Geografia_ID) REFERENCES Tipo_Geografia(ID) 
 )
 GO
 /*Creacion Tabla Categorias*/
-CREATE TABLE Categorias(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+CREATE TABLE Categoria(
+	ID SMALLINT PRIMARY KEY IDENTITY(1,1)
 	,Nombre nvarchar(50)
 )
 GO
@@ -133,15 +134,13 @@ CREATE TABLE Direccion(
 	,Linea2 nvarchar(50)
 	,Zipcode SMALLINT
 	,FechaInicio DATE
-	,FK_Tipo_Direccion_ID INT
+	,FK_Tipo_Direccion_ID TINYINT
 	,FK_Geografia_ID INT
 	,FK_Persona_ID INT
-	,FK_Categoria_ID INT
 	,CONSTRAINT FK_Tipo_Direccion FOREIGN KEY (FK_Tipo_Direccion_ID) REFERENCES Tipo_Direccion(ID) 
-	,CONSTRAINT FK_Geografia FOREIGN KEY (FK_Geografia_ID) REFERENCES Geografia(ID) 
-	,CONSTRAINT FK_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
-	,CONSTRAINT FK_Categoria FOREIGN KEY (FK_Categoria_ID) REFERENCES Categoria(ID) 
-)
+	,CONSTRAINT FK_Geografia_Direccion FOREIGN KEY (FK_Geografia_ID) REFERENCES Geografia(ID) 
+	,CONSTRAINT FK_Persona_Direccion FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID)
+	)
 GO
 /*Creacion Tabla Tipo Identificacion*/
 CREATE TABLE Tipo_Identificacion(
@@ -192,7 +191,7 @@ CREATE TABLE Industria_Persona(
 	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
 	,FK_Persona_ID INT NOT NULL
 	,FK_Naturaleza_Industria_ID INT NOT NULL
-	,CONSTRAINT FK_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) -- Enlace Persona
+	,CONSTRAINT FK_Persona_Industria FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) -- Enlace Persona
 	,CONSTRAINT FK_Naturaleza_Industria FOREIGN KEY (FK_Naturaleza_Industria_ID) REFERENCES Naturaleza_Industria(ID) -- Enlace Naturaleza Industria
 )
 GO
@@ -222,26 +221,8 @@ CREATE TABLE Estado_Movimiento(
 GO
 /*Creacion Tabla Tipo Movimiento*/
 CREATE TABLE Tipo_Movimiento(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY IDENTITY(1,1)
 	,Descripcion nvarchar(50)
-)
-GO
-/*Creacion Tabla Agencia*/
-CREATE TABLE Agencia(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
-	,Nombre nvarchar(50) NOT NULL
-	,FK_Geografia_ID INT NOT NULL
-)
-GO
-/*Creacion Tabla Movimiento*/
-CREATE TABLE Movimiento(
-	ID INT PRIMARY KEY IDENTITY(1,1)
-	,Monto money NOT NULL
-	,Descripcion nvarchar(50)
-	,FK_Operacion_Crediticia_ID TINYINT
-	,FK_Tipo_Movimiento_ID TINYINT
-	,CONSTRAINT FK_Movimiento_Operacion_Cred FOREIGN KEY (FK_Operacion_Crediticia_ID) REFERENCES Operacion_Crediticia(ID)
-	,CONSTRAINT FK_Tipo_Movimiento FOREIGN KEY (FK_Tipo_Movimiento_ID) REFERENCES Tipo_Movimiento(ID)
 )
 GO
 /*Creacion Tabla Operacion_Crediticia*/
@@ -273,7 +254,7 @@ CREATE TABLE Operacion_Crediticia(
 	,Plazo_Restante nvarchar(60) NOT NULL
 	,FK_Persona_ID INT NOT NULL
 	,FK_Estado_Operacion_Crediticia_ID INT NOT NULL
-	,FK_Tipo_Operacion_Crediticia INT NOT NULL
+	,FK_Tipo_Operacion_Crediticia_ID INT NOT NULL
 	,FK_Agencia_ID INT NOT NULL
 	,CONSTRAINT FK_Persona_Operacion_Crediticia FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) -- Enlace a Persona Responsable de Op crediticia
 	,CONSTRAINT FK_Estado_Operacion_Crediticia FOREIGN KEY (FK_Estado_Operacion_Crediticia_ID) REFERENCES Estado_Operacion_Crediticia(ID) -- Enlace a Estado Actual Operacion Crediticia
@@ -281,6 +262,18 @@ CREATE TABLE Operacion_Crediticia(
 	,CONSTRAINT FK_Agencia FOREIGN KEY (FK_Agencia_ID) REFERENCES Agencia(ID) -- Enlace Agencia
 )
 GO
+/*Creacion Tabla Movimiento*/
+CREATE TABLE Movimiento(
+	ID INT PRIMARY KEY IDENTITY(1,1)
+	,Monto money NOT NULL
+	,Descripcion nvarchar(50)
+	,FK_Operacion_Crediticia_ID INT
+	,FK_Tipo_Movimiento_ID TINYINT
+	,CONSTRAINT FK_Movimiento_Operacion_Cred FOREIGN KEY (FK_Operacion_Crediticia_ID) REFERENCES Operacion_Crediticia(ID)
+	,CONSTRAINT FK_Tipo_Movimiento FOREIGN KEY (FK_Tipo_Movimiento_ID) REFERENCES Tipo_Movimiento(ID)
+)
+GO
+
 /*Creacion Tabla Garantias Operacion Creditica*/
 CREATE TABLE Garantia_Operacion_Crediticia(
 	ID INT PRIMARY KEY IDENTITY(1,1)
