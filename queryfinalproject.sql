@@ -33,6 +33,20 @@ CREATE TABLE Categoria(
 	,Nombre nvarchar(50)
 )
 GO
+/*Creacion Tabla Tipo Identificacion*/
+CREATE TABLE Tipo_Identificacion(
+	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	,Descripcion nvarchar(50)
+)
+GO
+/*Creacion Tabla Identificacion*/
+CREATE TABLE Identificacion(
+	ID INT PRIMARY KEY IDENTITY(1,1)
+	,Numero INT
+	,FK_Tipo_Identificacion_ID TINYINT
+	,CONSTRAINT FK_Tipo_Identificacion FOREIGN KEY (FK_Tipo_Identificacion_ID) REFERENCES Tipo_Identificacion(ID) 
+)
+GO
 /*Creacion Tabla Persona*/
 /**
 Las personas pueden ser de distinto tipo
@@ -48,10 +62,12 @@ CREATE TABLE Persona(
 	,Fecha_Nac DATE NOT NULL
 	,Estado_Civil INT NULL
 	,Juridica BIT NOT NULL 
-	,FK_Formacion_Educativa_ID TINYINT NOT NULL 
+	,FK_Formacion_Educativa_ID TINYINT NOT NULL
+	,FK_Identificacion_ID INT NOT NULL 
 	,FK_Categoria_ID SMALLINT NOT NULL 
 	,CONSTRAINT FK_Formacion_Educativa FOREIGN KEY (FK_Formacion_Educativa_ID) REFERENCES Formacion_Educativa(ID) 
 	,CONSTRAINT FK_Categoria_Persona FOREIGN KEY (FK_Categoria_ID) REFERENCES Categoria(ID) 
+	,CONSTRAINT FK_Identificacion_Persona FOREIGN KEY (FK_Identificacion_ID) REFERENCES Identificacion(ID) 
 )
 GO
 /*Creacion Tabla Tipo Estado Persona*/
@@ -157,20 +173,7 @@ CREATE TABLE Direccion(
 	,CONSTRAINT FK_Persona_Direccion FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID)
 	)
 GO
-/*Creacion Tabla Tipo Identificacion*/
-CREATE TABLE Tipo_Identificacion(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
-	,Descripcion nvarchar(50)
-)
-GO
-/*Creacion Tabla Identificacion*/
-CREATE TABLE Identificacion(
-	ID INT PRIMARY KEY IDENTITY(1,1)
-	,Numero INT
-	,FK_Tipo_Identificacion_ID TINYINT
-	,CONSTRAINT FK_Tipo_Identificacion FOREIGN KEY (FK_Tipo_Identificacion_ID) REFERENCES Tipo_Identificacion(ID) 
-)
-GO
+
 /*Creacion Tabla Tipo Relacion*/
 CREATE TABLE Tipo_Relacion(
 	ID SMALLINT PRIMARY KEY IDENTITY(1,1)
