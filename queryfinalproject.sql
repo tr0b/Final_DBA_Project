@@ -1,7 +1,9 @@
 USE master
+GO
 CREATE DATABASE dbBanco
+GO
 USE dbBanco
-
+GO
 /*
  *
  * Query dbBanco 2020-08-09
