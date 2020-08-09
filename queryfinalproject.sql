@@ -43,13 +43,23 @@ CREATE TABLE Persona(
 	,Estado_Civil INT NULL
 	,Juridica BIT NOT NULL 
 	,FK_Formacion_Educativa_ID TINYINT NOT NULL 
+	,FK_Categoria_ID SMALLINT NOT NULL 
 	,CONSTRAINT FK_Formacion_Educativa FOREIGN KEY (FK_Formacion_Educativa_ID) REFERENCES Formacion_Educativa(ID) 
+	,CONSTRAINT FK_Categoria_Persona FOREIGN KEY (FK_Categoria_ID) REFERENCES Categoria(ID) 
 )
 GO
 /*Creacion Tabla Tipo Estado Persona*/
 CREATE TABLE Tipo_Estado_Persona(
 	ID TINYINT PRIMARY KEY IDENTITY(1,1)
 	,Nombre nvarchar(50)
+)
+GO
+CREATE TABLE Persona_Tipo(
+	ID INT PRIMARY KEY IDENTITY(1,1)
+	,FK_Persona_ID INT
+	,FK_Tipo_ID TINYINT
+	,CONSTRAINT FK_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
+	,CONSTRAINT FK_Tipo_de_Persona FOREIGN KEY (FK_Tipo_ID) REFERENCES Tipo_Persona(ID) 
 )
 GO
 /*Creacion Tabla Tipo Estado Persona*/
@@ -59,6 +69,8 @@ CREATE TABLE Estado_Persona(
 	,FechaFin DATETIME
 	,FK_Tipo_Estado_Persona_ID TINYINT
 	,FK_Persona_ID INT
+	,CONSTRAINT FK_Tipo_Estado_Persona FOREIGN KEY (FK_Tipo_Estado_ID) REFERENCES Tipo_Estado_Persona(ID) 
+	,CONSTRAINT FK_Estado_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
 )
 GO
 /*Creacion Tabla Mecanismo Contacto*/
@@ -67,6 +79,8 @@ CREATE TABLE Mecanismo_Contacto(
 	,Descripcion nvarchar(80)
 	,FK_Tipo_Mecanismo_ID TINYINT
 	,FK_Persona_ID INT
+	,CONSTRAINT FK_Contacto_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
+	,CONSTRAINT FK_Tipo_Mecanismo_Contacto FOREIGN KEY (FK_Tipo_Mecanismo_ID) REFERENCES Tipo_Mecanismo(ID) 
 )
 GO
 /*Creacion Tabla Moneda*/
@@ -215,7 +229,7 @@ CREATE TABLE Estado_Operacion_Crediticia(
 GO
 /*Creacion Tabla Estado Movimiento*/
 CREATE TABLE Estado_Movimiento(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY IDENTITY(1,1)
 	,Descripcion nvarchar(50)
 )
 GO
@@ -268,9 +282,13 @@ CREATE TABLE Movimiento(
 	,Monto money NOT NULL
 	,Descripcion nvarchar(50)
 	,FK_Operacion_Crediticia_ID INT
+	,FK_Moneda_ID INT
 	,FK_Tipo_Movimiento_ID TINYINT
+	,FK_Estado_Movimiento_ID TINYINT
 	,CONSTRAINT FK_Movimiento_Operacion_Cred FOREIGN KEY (FK_Operacion_Crediticia_ID) REFERENCES Operacion_Crediticia(ID)
 	,CONSTRAINT FK_Tipo_Movimiento FOREIGN KEY (FK_Tipo_Movimiento_ID) REFERENCES Tipo_Movimiento(ID)
+	,CONSTRAINT FK_Moneda_Movimiento FOREIGN KEY (FK_Moneda_ID) REFERENCES Moneda(ID)
+	,CONSTRAINT FK_Estado_Movimiento FOREIGN KEY (FK_Estado_Movimiento_ID) REFERENCES Estado_Movimiento(ID)
 )
 GO
 
