@@ -27,6 +27,12 @@ CREATE TABLE Tipo_Mecanismo(
 	,Descripcion nvarchar(50)
 )
 GO
+/*Creacion Tabla Categorias*/
+CREATE TABLE Categoria(
+	ID SMALLINT PRIMARY KEY IDENTITY(1,1)
+	,Nombre nvarchar(50)
+)
+GO
 /*Creacion Tabla Persona*/
 /**
 Las personas pueden ser de distinto tipo
@@ -67,7 +73,7 @@ CREATE TABLE Estado_Persona(
 	ID INT PRIMARY KEY IDENTITY(1,1)
 	,FechaInicio DATETIME
 	,FechaFin DATETIME
-	,FK_Tipo_Estado_Persona_ID TINYINT
+	,FK_Tipo_Estado_ID TINYINT
 	,FK_Persona_ID INT
 	,CONSTRAINT FK_Tipo_Estado_Persona FOREIGN KEY (FK_Tipo_Estado_ID) REFERENCES Tipo_Estado_Persona(ID) 
 	,CONSTRAINT FK_Estado_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
@@ -116,7 +122,7 @@ CREATE TABLE Ingreso(
 	,Planilla BIT
 	,FK_Persona_ID INT
 	,FK_Tipo_Ingreso_ID TINYINT
-	,CONSTRAINT FK_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
+	,CONSTRAINT FK_Persona_Ingreso FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
 	,CONSTRAINT FK_Tipo_Ingreso FOREIGN KEY (FK_Tipo_Ingreso_ID) REFERENCES Tipo_Ingreso(ID) 
 )
 GO
@@ -135,12 +141,7 @@ CREATE TABLE Geografia(
 	,CONSTRAINT FK_Tipo_Geografia FOREIGN KEY (FK_Tipo_Geografia_ID) REFERENCES Tipo_Geografia(ID) 
 )
 GO
-/*Creacion Tabla Categorias*/
-CREATE TABLE Categoria(
-	ID SMALLINT PRIMARY KEY IDENTITY(1,1)
-	,Nombre nvarchar(50)
-)
-GO
+
 /*Creacion Tabla Direccion*/
 CREATE TABLE Direccion(
 	ID INT PRIMARY KEY IDENTITY(1,1)
