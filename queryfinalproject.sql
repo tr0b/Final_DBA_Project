@@ -9,17 +9,53 @@ GO
  * Query dbBanco 2020-08-09
  *
  */
-/*Creacion Tabla Tipo Persona*/
+/*Checking compatibility level*/
+SELECT d.compatibility_level
+    FROM sys.databases as d
+    WHERE d.name = Db_Name();
+GO
+/*Setting compatibility level to 150*/
+ALTER DATABASE CURRENT 
+SET COMPATIBILITY_LEVEL = 150;
+GO
+/*Set Memory Optimized Elevate To Snapshot*/
+ALTER DATABASE CURRENT 
+SET MEMORY_OPTIMIZED_ELEVATE_TO_SNAPSHOT = ON;
+GO
+/*Creating Filegroup to create in-memory tables*/
+ALTER DATABASE CURRENT 
+ADD FILEGROUP FG_MemoryOptimized_Data CONTAINS MEMORY_OPTIMIZED_DATA;
+GO
+/*Create File inside Filegroup*/
+
+
+ALTER DATABASE dbBanco 
+ADD FILE (
+name=F_MO_Data_dbBanco, 
+filename='/var/opt/mssql/FG_MemoryOptimized_Data'
+) 
+TO FILEGROUP FG_MemoryOptimized_Data
+GO
+/*
+
+Creacion Tabla Tipo Persona
+
+*/
 CREATE TABLE Tipo_Persona(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Nombre nvarchar(50)
 )
+WITH (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Formacion Educativa*/
 CREATE TABLE Formacion_Educativa(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(50)
+	
 )
+WITH (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Mecanismos*/
 CREATE TABLE Tipo_Mecanismo(
@@ -29,23 +65,29 @@ CREATE TABLE Tipo_Mecanismo(
 GO
 /*Creacion Tabla Categorias*/
 CREATE TABLE Categoria(
-	ID SMALLINT PRIMARY KEY IDENTITY(1,1)
+	ID SMALLINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Nombre nvarchar(50)
 )
+WITH (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Identificacion*/
 CREATE TABLE Tipo_Identificacion(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(50)
 )
+WITH (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Identificacion*/
 CREATE TABLE Identificacion(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Numero INT
 	,FK_Tipo_Identificacion_ID TINYINT
 	,CONSTRAINT FK_Tipo_Identificacion FOREIGN KEY (FK_Tipo_Identificacion_ID) REFERENCES Tipo_Identificacion(ID) 
 )
+WITH (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Persona*/
 /**
@@ -53,7 +95,7 @@ Las personas pueden ser de distinto tipo
 (juridicas, fisicas)
  **/
 CREATE TABLE Persona(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,Primer_Nombre nvarchar(40) NOT NULL
 	,Segundo_Nombre nvarchar(40) NULL
 	,Primer_Apellido nvarchar(40) NOT NULL
@@ -69,24 +111,33 @@ CREATE TABLE Persona(
 	,CONSTRAINT FK_Categoria_Persona FOREIGN KEY (FK_Categoria_ID) REFERENCES Categoria(ID) 
 	,CONSTRAINT FK_Identificacion_Persona FOREIGN KEY (FK_Identificacion_ID) REFERENCES Identificacion(ID) 
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Estado Persona*/
 CREATE TABLE Tipo_Estado_Persona(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Nombre nvarchar(50)
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 CREATE TABLE Persona_Tipo(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,FK_Persona_ID INT
 	,FK_Tipo_ID TINYINT
 	,CONSTRAINT FK_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
 	,CONSTRAINT FK_Tipo_de_Persona FOREIGN KEY (FK_Tipo_ID) REFERENCES Tipo_Persona(ID) 
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Estado Persona*/
 CREATE TABLE Estado_Persona(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,FechaInicio DATETIME
 	,FechaFin DATETIME
 	,FK_Tipo_Estado_ID TINYINT
@@ -94,46 +145,65 @@ CREATE TABLE Estado_Persona(
 	,CONSTRAINT FK_Tipo_Estado_Persona FOREIGN KEY (FK_Tipo_Estado_ID) REFERENCES Tipo_Estado_Persona(ID) 
 	,CONSTRAINT FK_Estado_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Mecanismo Contacto*/
 CREATE TABLE Mecanismo_Contacto(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(80)
 	,FK_Tipo_Mecanismo_ID TINYINT
 	,FK_Persona_ID INT
 	,CONSTRAINT FK_Contacto_Persona FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
 	,CONSTRAINT FK_Tipo_Mecanismo_Contacto FOREIGN KEY (FK_Tipo_Mecanismo_ID) REFERENCES Tipo_Mecanismo(ID) 
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
+
 /*Creacion Tabla Moneda*/
 CREATE TABLE Moneda(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Nombre nvarchar(50)
 	,IsoAlpha3 nvarchar(3) -- E.g. USD, ASD, CRC, EUR,
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Agencia*/
 CREATE TABLE Agencia(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(80)
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Geografia*/
 CREATE TABLE Tipo_Geografia(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Nombre nvarchar(50)
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Ingreso*/
 CREATE TABLE Tipo_Ingreso(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Nombre nvarchar(50)
 	,IsoAlpha3 nvarchar(3)
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Ingreso*/
 CREATE TABLE Ingreso(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,Monto money
 	,Planilla BIT
 	,FK_Persona_ID INT
@@ -141,26 +211,35 @@ CREATE TABLE Ingreso(
 	,CONSTRAINT FK_Persona_Ingreso FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
 	,CONSTRAINT FK_Tipo_Ingreso FOREIGN KEY (FK_Tipo_Ingreso_ID) REFERENCES Tipo_Ingreso(ID) 
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Direccion*/
 CREATE TABLE Tipo_Direccion(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Nombre nvarchar(50)
 )
+WITH
+            (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Geografia*/
 CREATE TABLE Geografia(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Nombre nvarchar(50)
 	,FK_GeografiaID INT
 	,FK_Tipo_Geografia_ID TINYINT
 	,CONSTRAINT FK_Tipo_Geografia FOREIGN KEY (FK_Tipo_Geografia_ID) REFERENCES Tipo_Geografia(ID) 
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 
 /*Creacion Tabla Direccion*/
 CREATE TABLE Direccion(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Linea1 nvarchar(50)
 	,Linea2 nvarchar(50)
 	,Zipcode SMALLINT
@@ -172,17 +251,24 @@ CREATE TABLE Direccion(
 	,CONSTRAINT FK_Geografia_Direccion FOREIGN KEY (FK_Geografia_ID) REFERENCES Geografia(ID) 
 	,CONSTRAINT FK_Persona_Direccion FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID)
 	)
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 
 /*Creacion Tabla Tipo Relacion*/
 CREATE TABLE Tipo_Relacion(
-	ID SMALLINT PRIMARY KEY IDENTITY(1,1)
+	ID SMALLINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(50)
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
+
 /*Creacion Tabla Intermediaria Relacion*/
 CREATE TABLE Relacion(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,FK_Persona1_ID INT NOT NULL
 	,FK_Persona2_ID INT NOT NULL
 	,FK_Tipo_Relacion SMALLINT NOT NULL
@@ -190,62 +276,90 @@ CREATE TABLE Relacion(
 	,CONSTRAINT FK_Persona2 FOREIGN KEY (FK_Persona2_ID) REFERENCES Persona(ID) -- Enlace Persona2
 	,CONSTRAINT FK_PersonaRelacion FOREIGN KEY (FK_Tipo_Relacion) REFERENCES Tipo_Relacion(ID) -- Enlace Relacion Personas
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Sitio Web*/
 CREATE TABLE Sitio_Web(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,Descripcion nvarchar(200) NOT NULL
 	,FK_Persona_ID INT NOT NULL
 	,CONSTRAINT FK_Persona_Sitio_Web FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) 
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Naturaleza Industria*/
 CREATE TABLE Naturaleza_Industria(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,Nombre nvarchar(50) NOT NULL
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
+GO
 /*Creacion Tabla Intermediaria Industria Persona*/
 CREATE TABLE Industria_Persona(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,FK_Persona_ID INT NOT NULL
 	,FK_Naturaleza_Industria_ID INT NOT NULL
 	,CONSTRAINT FK_Persona_Industria FOREIGN KEY (FK_Persona_ID) REFERENCES Persona(ID) -- Enlace Persona
 	,CONSTRAINT FK_Naturaleza_Industria FOREIGN KEY (FK_Naturaleza_Industria_ID) REFERENCES Naturaleza_Industria(ID) -- Enlace Naturaleza Industria
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Garantia*/
 CREATE TABLE Garantia(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(100)
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Operacion Crediticia*/
 CREATE TABLE Tipo_Operacion_Crediticia(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,Descripcion nvarchar(50) NOT NULL
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Estado Operacion Crediticia*/
 CREATE TABLE Estado_Operacion_Crediticia(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,Descripcion nvarchar(50) NOT NULL
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Estado Movimiento*/
 CREATE TABLE Estado_Movimiento(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(50)
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Tipo Movimiento*/
 CREATE TABLE Tipo_Movimiento(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(50)
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Operacion_Crediticia*/
 CREATE TABLE Operacion_Crediticia(
-	ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1) NOT NULL
 	,Fecha_Formalizacion DATETIME NOT NULL
 	,Fecha_Vencimiento DATETIME NOT NULL
 	,Fecha_Cancelacion DATETIME NULL
@@ -279,10 +393,14 @@ CREATE TABLE Operacion_Crediticia(
 	,CONSTRAINT FK_Tipo_Operacion_Crediticia FOREIGN KEY (FK_Tipo_Operacion_Crediticia_ID) REFERENCES Tipo_Operacion_Crediticia(ID) -- Enlace a Tipo Operacion Crediticia
 	,CONSTRAINT FK_Agencia FOREIGN KEY (FK_Agencia_ID) REFERENCES Agencia(ID) -- Enlace Agencia
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
+
 /*Creacion Tabla Movimiento*/
 CREATE TABLE Movimiento(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Monto money NOT NULL
 	,Descripcion nvarchar(50)
 	,FK_Operacion_Crediticia_ID INT
@@ -294,16 +412,22 @@ CREATE TABLE Movimiento(
 	,CONSTRAINT FK_Moneda_Movimiento FOREIGN KEY (FK_Moneda_ID) REFERENCES Moneda(ID)
 	,CONSTRAINT FK_Estado_Movimiento FOREIGN KEY (FK_Estado_Movimiento_ID) REFERENCES Estado_Movimiento(ID)
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 
 /*Creacion Tabla Garantias Operacion Creditica*/
 CREATE TABLE Garantia_Operacion_Crediticia(
-	ID INT PRIMARY KEY IDENTITY(1,1)
+	ID INT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,FK_Operacion_Crediticia_ID INT
 	,FK_Garantia_ID INT
 	,CONSTRAINT FK_Operacion_Crediticia FOREIGN KEY (FK_Operacion_Crediticia_ID) REFERENCES Operacion_Crediticia(ID) 
 	,CONSTRAINT FK_Garantia_Operacion FOREIGN KEY (FK_Garantia_ID) REFERENCES Garantia(ID) 
 )
+WITH
+			(MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 ---Templates para tablas adicionales en caso de ser necesario
 /* CREATE TABLE Any(
