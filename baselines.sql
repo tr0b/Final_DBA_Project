@@ -523,3 +523,161 @@ REG_DWORD,
 12;
 GO
 /*Verification*/
+/*5.2 Ensure 'Default Trace Enabled' Server Configuration Option is set to
+'1' (Scored)*/
+SELECT name,
+CAST(value as int) as value_configured,
+CAST(value_in_use as int) as value_in_use
+FROM sys.configurations
+WHERE name = 'default trace enabled';
+GO
+--Remediation
+EXECUTE sp_configure 'show advanced options', 1;
+RECONFIGURE;
+EXECUTE sp_configure 'default trace enabled', 1;
+RECONFIGURE;
+GO
+EXECUTE sp_configure 'show advanced options', 0;
+RECONFIGURE;
+GO
+/*Verification*/
+/*5.3 Ensure 'Login Auditing' is set to 'failed logins' (Scored)*/
+EXEC xp_loginconfig 'audit level';
+GO
+/*
+EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE',
+N'Software\Microsoft\MSSQLServer\MSSQLServer', N'AuditLevel',
+REG_DWORD, 2
+ */
+
+ /*5.4 Ensure 'SQL Server Audit' is set to capture both 'failed' and
+'successful logins' (Scored)*/
+
+SELECT
+S.name AS 'Audit Name'
+, CASE S.is_state_enabled
+WHEN 1 THEN 'Y'
+WHEN 0 THEN 'N' END AS 'Audit Enabled'
+, S.type_desc AS 'Write Location'
+, SA.name AS 'Audit Specification Name'
+, CASE SA.is_state_enabled
+WHEN 1 THEN 'Y'
+WHEN 0 THEN 'N' END AS 'Audit Specification Enabled'
+, SAD.audit_action_name
+, SAD.audited_result
+FROM sys.server_audit_specification_details AS SAD
+JOIN sys.server_audit_specifications AS SA
+ON SAD.server_specification_id = SA.server_specification_id
+JOIN sys.server_audits AS S
+ON SA.audit_guid = S.audit_guid
+WHERE SAD.audit_action_id IN ('CNAU', 'LGFL', 'LGSD');
+GO
+--Remediation
+CREATE SERVER AUDIT TrackLogins
+TO APPLICATION_LOG;
+GO
+CREATE SERVER AUDIT SPECIFICATION TrackAllLogins
+FOR SERVER AUDIT TrackLogins
+ADD (FAILED_LOGIN_GROUP),
+ADD (SUCCESSFUL_LOGIN_GROUP),
+ADD (AUDIT_CHANGE_GROUP)
+WITH (STATE = ON);
+GO
+ALTER SERVER AUDIT TrackLogins
+WITH (STATE = ON);
+GO
+--Verification
+SELECT
+S.name AS 'Audit Name'
+, CASE S.is_state_enabled
+WHEN 1 THEN 'Y'
+WHEN 0 THEN 'N' END AS 'Audit Enabled'
+, S.type_desc AS 'Write Location'
+, SA.name AS 'Audit Specification Name'
+, CASE SA.is_state_enabled
+WHEN 1 THEN 'Y'
+WHEN 0 THEN 'N' END AS 'Audit Specification Enabled'
+, SAD.audit_action_name
+, SAD.audited_result
+FROM sys.server_audit_specification_details AS SAD
+JOIN sys.server_audit_specifications AS SA
+ON SAD.server_specification_id = SA.server_specification_id
+JOIN sys.server_audits AS S
+ON SA.audit_guid = S.audit_guid
+WHERE SAD.audit_action_id IN ('CNAU', 'LGFL', 'LGSD');
+GO
+--6 Application Development
+/*6.1 Ensure Database and Application User Input is Sanitized (Not Scored)*/
+/*
+Check with the application teams to ensure any database interaction is through the use of
+stored procedures and not dynamic SQL. Revoke any INSERT , UPDATE , or DELETE privileges
+to users so that modifications to data must be done through stored procedures. Verify that
+there's no SQL query in the application code produced by string concatenation.
+*/
+
+/*
+
+
+Remediation
+
+
+*/
+
+/*6.2 Ensure 'CLR Assembly Permission Set' is set to 'SAFE_ACCESS' for All*/
+SELECT name,
+permission_set_desc
+FROM sys.assemblies
+WHERE is_user_defined = 1;
+GO
+--Remediation
+/*
+ALTER ASSEMBLY <assembly_name> WITH PERMISSION_SET = SAFE;
+GO
+*/
+/*7 Encryption*/
+/*
+7.1 Ensure 'Symmetric Key encryption algorithm' is set to 'AES_128' or
+higher in non-system databases (Scored)
+*/
+USE dbBanco
+GO
+SELECT db_name() AS Database_Name, name AS Key_Name
+FROM sys.symmetric_keys
+WHERE algorithm_desc NOT IN ('AES_128','AES_192','AES_256')
+AND db_id() > 4;
+GO
+/*
+Remediation
+
+Update all Encrypted data to use newer algorithms
+
+*/
+/*
+7.2 Ensure Asymmetric Key Size is set to 'greater than or equal to 2048'
+*/
+USE dbBanco
+GO
+SELECT db_name() AS Database_Name, name AS Key_Name
+FROM sys.asymmetric_keys
+WHERE key_length < 2048
+AND db_id() > 4;
+GO
+
+/*
+Remediation
+
+Update all Encrypted data to use newer, stronger algorithms. 
+
+*/
+
+/*
+8 Appendix: Additional Considerations
+*/
+/*
+8.1 Ensure 'SQL Server Browser Service' is configured correctly (Not)
+*/
+
+/*
+Remediation:
+Enable or disable the service as needed for your environment.
+*/
