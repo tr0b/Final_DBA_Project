@@ -59,9 +59,11 @@ WITH (MEMORY_OPTIMIZED = ON,
 GO
 /*Creacion Tabla Tipo Mecanismos*/
 CREATE TABLE Tipo_Mecanismo(
-	ID TINYINT PRIMARY KEY IDENTITY(1,1)
+	ID TINYINT PRIMARY KEY NONCLUSTERED IDENTITY(1,1)
 	,Descripcion nvarchar(50)
 )
+WITH (MEMORY_OPTIMIZED = ON,
+            DURABILITY = SCHEMA_AND_DATA);
 GO
 /*Creacion Tabla Categorias*/
 CREATE TABLE Categoria(
