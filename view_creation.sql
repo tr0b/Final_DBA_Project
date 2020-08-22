@@ -237,53 +237,82 @@ SELECT
 FROM Estado_Operacion_Crediticia
 GO
 
-CREATE VIEW v_Production_Categories WITH SCHEMABINDING AS
+CREATE VIEW v_Estado_Movimiento WITH SCHEMABINDING AS
 
-SELECT * FROM Production.Categories
+SELECT 
+
+	ID 
+	,Descripcion 
+
+FROM Estado_Movimiento
 GO
 
-CREATE VIEW v_Production_Products WITH SCHEMABINDING AS
+CREATE VIEW v_Tipo_Movimiento WITH SCHEMABINDING AS
 
-SELECT * FROM Production.Products
+SELECT 
+
+	ID 
+	,Descripcion 
+
+FROM Tipo_Movimiento
 GO
 
-CREATE VIEW v_Sales_Customers WITH SCHEMABINDING AS
+CREATE VIEW v_Operacion_Crediticia WITH SCHEMABINDING AS
 
-SELECT * FROM Sales.Customers
+SELECT
+
+	ID 
+	,Fecha_Formalizacion
+	,Fecha_Vencimiento 
+	,Fecha_Cancelacion 
+	,Descripcion 
+	,Mora_Legal 
+	,Mora_Financiera 
+	,Saldo_Principal 
+	,Cuotas_Vencidas 
+	,Monto_Cuotas_Vencidas 
+	,Monto_Interes_Cobrado_Total 
+	,Monto_Gestion_Cobrado_Total 
+	,Cuota_Principal 
+	,Cuota_Interes 
+	,Cuota_Seguro 
+	,Cuota_Comision 
+	,Monto_Amortizacion_Extraordinaria 
+	,Monto_Original 
+	,Tasa_Interes
+	,Dia_Pago 
+	,Dias_Atraso_SUGEF
+	,Saldo_Amortizado
+	,Plazo
+	,Monto_Interes_Acumulado
+	,Plazo_Restante
+	,FK_Persona_ID
+	,FK_Estado_Operacion_Crediticia_ID
+	,FK_Tipo_Operacion_Crediticia_ID
+	,FK_Agencia_ID
+FROM Operacion_Crediticia
 GO
 
-CREATE VIEW v_Sales_Shippers WITH SCHEMABINDING AS
+CREATE VIEW v_Movimiento WITH SCHEMABINDING AS
 
-SELECT * FROM Sales.Shippers
+SELECT 
+
+	ID 
+	,Monto
+	,Descripcion 
+	,FK_Operacion_Crediticia_ID 
+	,FK_Moneda_ID 
+	,FK_Tipo_Movimiento_ID 
+	,FK_Estado_Movimiento_ID 
+FROM Movimiento
 GO
 
-CREATE VIEW v_Sales_Orders WITH SCHEMABINDING AS
+CREATE VIEW v_Garantia_Operacion_Crediticia WITH SCHEMABINDING AS
 
-SELECT * FROM Sales.Orders
+SELECT 
+
+	ID 
+	,FK_Operacion_Crediticia_ID 
+	,FK_Garantia_ID 
+FROM Garantia_Operacion_Crediticia
 GO
-
-CREATE VIEW v_Sales_OrderDetails WITH SCHEMABINDING AS
-
-SELECT * FROM Sales.OrderDetails
-GO
-
-CREATE VIEW v_Stats_Tests WITH SCHEMABINDING AS
-
-SELECT * FROM Stats.Tests
-GO
-
-CREATE VIEW v_Stats_Scores WITH SCHEMABINDING AS 
-
-SELECT * FROM Stats.Scores
-GO
-
-CREATE VIEW v_dbo_Nums WITH SCHEMABINDING AS
-
-SELECT * FROM dbo.Nums
-GO
-
-CREATE VIEW v_Any WITH SCHEMABINDING AS
-
-SELECT * FROM dbo.Nums
-GO
-
