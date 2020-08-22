@@ -164,6 +164,8 @@ WITH
             (MEMORY_OPTIMIZED = ON,
             DURABILITY = SCHEMA_AND_DATA);
 GO
+DROP VIEW v_Mecanismo_Contacto
+
 
 /*Creacion Tabla Moneda*/
 CREATE TABLE Moneda(
@@ -431,6 +433,7 @@ WITH
 			(MEMORY_OPTIMIZED = ON,
             DURABILITY = SCHEMA_AND_DATA);
 GO
+
 ---Templates para tablas adicionales en caso de ser necesario
 /* CREATE TABLE Any(
  *         ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL

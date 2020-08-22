@@ -191,102 +191,100 @@ GO
 
 GRANT UPDATE ON Garantia_Operacion_Crediticia TO Consulta_Operaciones
 GO
-/**Nevermind, exercise didnt really ask for this**/
-
-/*GRANT SELECT ON Tipo_Persona TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Persona TO Consulta_Operaciones
 GO
-GRANT SELECT ON Formacion_Educativa TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Formacion_Educativa TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Mecanismo TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Mecanismo TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Categoria TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Categoria TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Identificacion TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Identificacion TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Identificacion TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Identificacion TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Persona TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Persona TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Estado_Persona TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Estado_Persona TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Persona_Tipo TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Persona_Tipo TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Estado_Persona TO Consulta_Operaciones 
+GRANT SELECT ON dbo.v_Estado_Persona TO Consulta_Operaciones 
 GO
 
-GRANT SELECT ON Mecanismo_Contacto TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Mecanismo_Contacto TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Moneda TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Moneda TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Agencia TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Agencia TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Geografia TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Geografia TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Ingreso TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Ingreso TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Ingreso TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Ingreso TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Direccion TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Direccion TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Direccion TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Direccion TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Geografia TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Geografia TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Relacion TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Relacion TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Relacion TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Relacion TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Sitio_Web TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Sitio_Web TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Naturaleza_Industria TO Consulta_Operaciones 
+GRANT SELECT ON dbo.v_Naturaleza_Industria TO Consulta_Operaciones 
 GO
 
-GRANT SELECT ON Industria_Persona TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Industria_Persona TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Garantia TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Garantia TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Operacion_Crediticia TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Operacion_Crediticia TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Estado_Operacion_Crediticia TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Estado_Operacion_Crediticia TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Estado_Movimiento TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Estado_Movimiento TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Tipo_Movimiento TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Tipo_Movimiento TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Operacion_Crediticia TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Operacion_Crediticia TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Movimiento TO Consulta_Operaciones
+GRANT SELECT ON dbo.v_Movimiento TO Consulta_Operaciones
 GO
 
-GRANT SELECT ON Garantia_Operacion_Crediticia TO Consulta_Operaciones
-GO*/
+GRANT SELECT ON dbo.v_Garantia_Operacion_Crediticia TO Consulta_Operaciones
+GO
 /*Inserts*/
 GRANT INSERT ON Tipo_Persona TO Consulta_Operaciones
 GO
@@ -383,3 +381,10 @@ GO
 
 GRANT INSERT ON Garantia_Operacion_Crediticia TO Consulta_Operaciones
 GO
+/*acceso a USP */
+GRANT EXECUTE ON dbo.NuevoCliente TO Rol_Mantenimiento_Clientes
+GO
+
+SELECT * FROM Tipo_Movimiento
+
+SELECT * FROM v_Mecanismo_Contacto

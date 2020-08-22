@@ -39,10 +39,6 @@ GO
 CREATE ROLE Lectura_General AUTHORIZATION Kira;
 GO
 -- Se Revocan los privilegios de select dentro del schema DBO en los siguientes roles
-DENY SELECT ON SCHEMA :: DBO TO Rol_Administrativo
-DENY SELECT ON SCHEMA :: DBO TO Rol_Mantenimiento_Clientes
-DENY SELECT ON SCHEMA :: DBO TO Consulta_Operaciones
-DENY SELECT ON SCHEMA :: DBO TO Lectura_General
 /*Es requerido aplicar (GRANT) todos los objetos que caigan en la gobernanza de los roles
 anteriores. (TRABAJAR EN ESTO)*/
 -- Privilegios EXEC USER SPS
@@ -69,97 +65,97 @@ ALTER ROLE Lectura_General
 ADD MEMBER Kira
 GO
 /*Grant selects on views for General read-only role*/
-GRANT SELECT ON v_Tipo_Persona TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Persona TO Lectura_General
 GO
-GRANT SELECT ON v_Formacion_Educativa TO Lectura_General
-GO
-
-GRANT SELECT ON v_Tipo_Mecanismo TO Lectura_General
+GRANT SELECT ON dbo.v_Formacion_Educativa TO Lectura_General
 GO
 
-GRANT SELECT ON v_Categoria TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Mecanismo TO Lectura_General
 GO
 
-GRANT SELECT ON v_Tipo_Identificacion TO Lectura_General
+GRANT SELECT ON dbo.v_Categoria TO Lectura_General
 GO
 
-GRANT SELECT ON v_Identificacion TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Identificacion TO Lectura_General
 GO
 
-GRANT SELECT ON v_Persona TO Lectura_General
+GRANT SELECT ON dbo.v_Identificacion TO Lectura_General
 GO
 
-GRANT SELECT ON v_Tipo_Estado_Persona TO Lectura_General
+GRANT SELECT ON dbo.v_Persona TO Lectura_General
 GO
 
-GRANT SELECT ON v_Persona_Tipo TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Estado_Persona TO Lectura_General
 GO
 
-GRANT SELECT ON v_Estado_Persona TO Lectura_General 
+GRANT SELECT ON dbo.v_Persona_Tipo TO Lectura_General
 GO
 
-GRANT SELECT ON v_Mecanismo_Contacto TO Lectura_General
+GRANT SELECT ON dbo.v_Estado_Persona TO Lectura_General 
 GO
 
-GRANT SELECT ON v_Moneda TO Lectura_General
+GRANT SELECT ON dbo.v_Mecanismo_Contacto TO Lectura_General
 GO
 
-GRANT SELECT ON v_Agencia TO Lectura_General
+GRANT SELECT ON dbo.v_Moneda TO Lectura_General
 GO
 
-GRANT SELECT ON v_Tipo_Geografia TO Lectura_General
+GRANT SELECT ON dbo.v_Agencia TO Lectura_General
 GO
 
-GRANT SELECT ON v_Tipo_Ingreso TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Geografia TO Lectura_General
 GO
 
-GRANT SELECT ON v_Ingreso TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Ingreso TO Lectura_General
 GO
 
-GRANT SELECT ON v_Tipo_Direccion TO Lectura_General
+GRANT SELECT ON dbo.v_Ingreso TO Lectura_General
 GO
 
-GRANT SELECT ON v_Direccion TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Direccion TO Lectura_General
 GO
 
-GRANT SELECT ON v_Geografia TO Lectura_General
+GRANT SELECT ON dbo.v_Direccion TO Lectura_General
 GO
 
-GRANT SELECT ON v_Tipo_Relacion TO Lectura_General
+GRANT SELECT ON dbo.v_Geografia TO Lectura_General
 GO
 
-GRANT SELECT ON v_Relacion TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Relacion TO Lectura_General
 GO
 
-GRANT SELECT ON v_Sitio_Web TO Lectura_General
+GRANT SELECT ON dbo.v_Relacion TO Lectura_General
 GO
 
-GRANT SELECT ON v_Naturaleza_Industria TO Lectura_General 
+GRANT SELECT ON dbo.v_Sitio_Web TO Lectura_General
 GO
 
-GRANT SELECT ON v_Industria_Persona TO Lectura_General
+GRANT SELECT ON dbo.v_Naturaleza_Industria TO Lectura_General 
 GO
 
-GRANT SELECT ON v_Garantia TO Lectura_General
+GRANT SELECT ON dbo.v_Industria_Persona TO Lectura_General
 GO
 
-GRANT SELECT ON v_Tipo_Operacion_Crediticia TO Lectura_General
+GRANT SELECT ON dbo.v_Garantia TO Lectura_General
 GO
 
-GRANT SELECT ON v_Estado_Operacion_Crediticia TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Operacion_Crediticia TO Lectura_General
 GO
 
-GRANT SELECT ON v_Estado_Movimiento TO Lectura_General
+GRANT SELECT ON dbo.v_Estado_Operacion_Crediticia TO Lectura_General
 GO
 
-GRANT SELECT ON v_Tipo_Movimiento TO Lectura_General
+GRANT SELECT ON dbo.v_Estado_Movimiento TO Lectura_General
 GO
 
-GRANT SELECT ON v_Operacion_Crediticia TO Lectura_General
+GRANT SELECT ON dbo.v_Tipo_Movimiento TO Lectura_General
 GO
 
-GRANT SELECT ON v_Movimiento TO Lectura_General
+GRANT SELECT ON dbo.v_Operacion_Crediticia TO Lectura_General
 GO
 
-GRANT SELECT ON v_Garantia_Operacion_Crediticia TO Lectura_General
+GRANT SELECT ON dbo.v_Movimiento TO Lectura_General
+GO
+
+GRANT SELECT ON dbo.v_Garantia_Operacion_Crediticia TO Lectura_General
 GO

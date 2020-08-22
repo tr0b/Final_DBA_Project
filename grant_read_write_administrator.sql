@@ -668,3 +668,202 @@ GO
 
 GRANT INSERT ON Garantia_Operacion_Crediticia TO Rol_Administrativo
 GO
+
+/*ALTERS*/
+GRANT ALTER ON v_Tipo_Persona TO Rol_Administrativo
+GO
+GRANT ALTER ON v_Formacion_Educativa TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Mecanismo TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Categoria TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Identificacion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Identificacion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Persona TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Estado_Persona TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Persona_Tipo TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Estado_Persona TO Rol_Administrativo 
+GO
+
+GRANT ALTER ON v_Mecanismo_Contacto TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Moneda TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Agencia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Geografia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Ingreso TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Ingreso TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Direccion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Direccion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Geografia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Relacion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Relacion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Sitio_Web TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Naturaleza_Industria TO Rol_Administrativo 
+GO
+
+GRANT ALTER ON v_Industria_Persona TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Garantia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Operacion_Crediticia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Estado_Operacion_Crediticia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Estado_Movimiento TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Tipo_Movimiento TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Operacion_Crediticia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Movimiento TO Rol_Administrativo
+GO
+
+GRANT ALTER ON v_Garantia_Operacion_Crediticia TO Rol_Administrativo
+GO
+/**Grant read write permissions on tables for admin**/
+
+GRANT ALTER ON Tipo_Persona TO Rol_Administrativo
+GO
+GRANT ALTER ON Formacion_Educativa TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Mecanismo TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Categoria TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Identificacion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Identificacion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Persona TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Estado_Persona TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Persona_Tipo TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Estado_Persona TO Rol_Administrativo 
+GO
+
+GRANT ALTER ON Mecanismo_Contacto TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Moneda TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Agencia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Geografia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Ingreso TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Ingreso TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Direccion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Direccion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Geografia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Relacion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Relacion TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Sitio_Web TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Naturaleza_Industria TO Rol_Administrativo 
+GO
+
+GRANT ALTER ON Industria_Persona TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Garantia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Operacion_Crediticia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Estado_Operacion_Crediticia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Estado_Movimiento TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Tipo_Movimiento TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Operacion_Crediticia TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Movimiento TO Rol_Administrativo
+GO
+
+GRANT ALTER ON Garantia_Operacion_Crediticia TO Rol_Administrativo
+GO
+
+/**For USP's*/
+
+GRANT ALTER ON dbo.NuevoCliente TO Rol_Administrativo
+GO
+GRANT EXECUTE ON dbo.NuevoCliente TO Rol_Administrativo
+GO

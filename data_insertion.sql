@@ -496,12 +496,11 @@ CREATE PROCEDURE dbo.NuevoCliente
     ,@Descripcion nvarchar(80)
 	,@FK_Tipo_Mecanismo_ID TINYINT
 	,@FK_Persona_ID INT
-
-    SELECT * FROM Tipo_Mecanismo
     
 -- add more stored procedure parameters here
 AS
     BEGIN TRANSACTION
+    PRINT 'Ingresando Cliente...'
         INSERT INTO Persona VALUES (
      @Primer_Nombre 
     ,@Segundo_Nombre 
@@ -531,11 +530,70 @@ AS
 
     )
 
-
-    
+    INSERT INTO Mecanismo_Contacto VALUES(
+        @Descripcion 
+	    ,1
+	    ,@PersonaID 
+    )
+   
     COMMIT TRANSACTION
-    SELECT @param1, @param2
+    PRINT 'Cliente ingresado exitosamente'
+    
 GO
 -- example to execute the stored procedure we just created
-EXECUTE dbo.NuevoCliente 1 /*value_for_param1*/, 2 /*value_for_param2*/
+/*DECLARE @Now DATE
+SET @Now = GETDATE()
+EXECUTE dbo.NuevoCliente 'Thomas', 'Samos', 'Robinson', 'Roderick',1,@Now,1,1,
+2,4,6,'Linea 1', 'Linea 2', 36582, @Now, 1, 1, '88777744', 1, 2
+GO*/
+
+-- Create a new stored procedure called 'usp_Info_Cliente' in schema 'dbo'
+-- Drop the stored procedure if it already exists
+IF EXISTS (
+SELECT *
+    FROM INFORMATION_SCHEMA.ROUTINES
+WHERE SPECIFIC_SCHEMA = N'dbo'
+    AND SPECIFIC_NAME = N'usp_Info_Cliente'
+    AND ROUTINE_TYPE = N'PROCEDURE'
+)
+DROP PROCEDURE dbo.usp_Info_Cliente
+GO
+-- Create the stored procedure in the specified schema
+CREATE OR ALTER PROCEDURE dbo.usp_Info_Cliente
+     @clienteId INT /*default_value_for_param1*/
+-- add more stored procedure parameters here
+AS
+    -- body of the stored procedure
+    SELECT TOP 1
+    Primer_Nombre
+    ,Segundo_Nombre
+    ,Primer_Apellido
+    ,Segundo_Apellido
+    ,FechaInicio
+    ,contacto.Descripcion
+
+    ,tipoestadopersona.Nombre
+
+     FROM v_Persona as persona
+     
+    INNER JOIN v_Estado_Persona
+        ON persona.ID = v_Estado_Persona.FK_Persona_ID
+    INNER JOIN v_Mecanismo_Contacto AS contacto
+        ON persona.ID = contacto.FK_Persona_ID
+    INNER JOIN v_Tipo_Estado_Persona AS tipoestadopersona
+        ON v_Estado_Persona.FK_Tipo_Estado_ID = tipoestadopersona.ID
+    WHERE persona.ID = @clienteId
+    ORDER BY v_Estado_Persona.FechaInicio DESC
+     
+GO
+
+-- example to execute the stored procedure we just created
+EXECUTE dbo.usp_Info_Cliente 9
+GO
+
+ALTER TABLE Direccion ADD INDEX ix_FK_Persona_ID
+HASH (FK_Persona_ID) WITH (BUCKET_COUNT = 64); -- Nonunique.
+GO
+ALTER TABLE Estado_Persona ADD INDEX ix_FK_Persona_ID
+HASH (FK_Persona_ID) WITH (BUCKET_COUNT = 64); -- Nonunique.
 GO
