@@ -476,8 +476,9 @@ GO
 GRANT SELECT ON v_Garantia_Operacion_Crediticia TO Rol_Administrativo
 GO
 /**Grant read write permissions on tables for admin**/
+/**Nevermind, exercise didnt really ask for this**/
 
-GRANT SELECT ON Tipo_Persona TO Rol_Administrativo
+/*GRANT SELECT ON Tipo_Persona TO Rol_Administrativo
 GO
 GRANT SELECT ON Formacion_Educativa TO Rol_Administrativo
 GO
@@ -570,7 +571,7 @@ GRANT SELECT ON Movimiento TO Rol_Administrativo
 GO
 
 GRANT SELECT ON Garantia_Operacion_Crediticia TO Rol_Administrativo
-GO
+GO*/
 /*Inserts*/
 GRANT INSERT ON Tipo_Persona TO Rol_Administrativo
 GO
