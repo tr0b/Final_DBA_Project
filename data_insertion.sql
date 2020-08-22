@@ -87,6 +87,11 @@ GO
 -- PRINT 1;
 -- GO
 
+--INSERTS Tipo_Identificacion
+INSERT INTO Tipo_Identificacion (Descripcion) VALUES ('Física'), ('Juridica'), ('Residencial');
+
+--INSERTS Identificacion
+
 
 --INSERTS Personas
 INSERT INTO Persona (Primer_Nombre, Segundo_Nombre, Primer_Apellido, Segundo_Apellido, Genero, Fecha_Nac, Estado_Civil, Juridica, FK_Formacion_Educativa_ID, FK_Identificacion_ID, FK_Categoria_ID) VALUES ('Emmery', 'Ulrike', 'Frenzl', 'Parade', 2, '9/30/2000', 1, 1, 6, 110376228, 45);
