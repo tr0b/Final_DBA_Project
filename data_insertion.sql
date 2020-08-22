@@ -27,17 +27,26 @@ CREATE OR ALTER PROCEDURE NewClient
     @Estado_Civil NVARCHAR(30),
     @Juridica BIT,
     @FK_Formacion_Educativa_ID TINYINT,
-    @FK_Identificacion_ID NVARCHAR(30),
+    @FK_Identificacion_ID NVARCHAR(30), -- Podriamos usar SCOPE IDENTITY, ON IDENT, O, OUTPUT CLAUSE A LA HORA DE HACER EL INSERT
     @FK_Categoria_ID NVARCHAR(30),
     @DescripcionContacto NVARCHAR(80),
     @FK_Tipo_Mecanismo_ID TINYINT,
-    @FK_Persona_ID TINYINT,
+    @FK_Persona_ID TINYINT, -- Podriamos usar SCOPE IDENTITY, ON IDENT, O, OUTPUT CLAUSE A LA HORA DE HACER EL INSERT
     @NameCategoria NVARCHAR(50),
     @NumeroIdentificacion INT,
     @FK_Tipo_Identificacion_ID,
     @DescripcionIdentificacion NVARCHAR(50)
 AS
 BEGIN
+	/*Tiene que ir en un batch. Tiene que ir en una transaccion esto
+	 en un transaction
+	 	
+		BEGIN TRANSACTION
+
+		ROLLBACK
+
+		COMMIT TRANSACTION
+	 */
     SET NOCOUNT ON
     INSERT ALL
 
