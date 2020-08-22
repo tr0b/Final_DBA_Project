@@ -4,59 +4,162 @@ GO
 RECONFIGURE
 GO
 USE master
+--Creacion de Thomas (Administrador / Rol administrativo )
 CREATE LOGIN Thomas WITH PASSWORD = N'Thomas555';
--- Luego creamos un usuario Samos (tiene el ROL DENY EXEC USER SPS)
+-- Luego creamos un usuario Eri (tiene el rol Mantenimiento Clientes)
+CREATE LOGIN Eri WITH PASSWORD = N'Eri12345';
+-- Luego creamos un usuario Samos (tiene el rol Consulta Operaciones)
 CREATE LOGIN Samos WITH PASSWORD = N'Samos555';
--- Finalmente creamos un usuario Kira (tiene el ROL FULL ACCESS)
+-- Finalmente creamos un usuario Kira (tiene el ROL Lectura General)
 CREATE LOGIN Kira WITH PASSWORD = N'Kira5555';
 --Asociamos los logins a los usuarios dentro de la DB
 USE dbBanco
 CREATE USER Thomas 
 FROM LOGIN Thomas
+GO
 CREATE USER Samos  
 FROM LOGIN  Samos 
 GO
 CREATE USER Kira  
 FROM LOGIN  Kira 
 GO
---Se crea el rol consulta ventas para Thomas
+CREATE USER Eri  
+FROM LOGIN  Eri 
+GO
+--Se crea el  rol administrativo para Thomas
 CREATE ROLE Rol_Administrativo AUTHORIZATION Thomas;
 GO
---Se crea el rol exec user sps para Thomas
-CREATE ROLE Rol_Mantenimiento_Clientes AUTHORIZATION Thomas;
+--Se crea el  rol mantenimiento clientes para Thomas
+CREATE ROLE Rol_Mantenimiento_Clientes AUTHORIZATION Eri;
 GO
---Se crea el rol deny exec user sps para Samos
+--Se crea el  rol consultas operaciones para Samos
 CREATE ROLE Consulta_Operaciones AUTHORIZATION Samos;
 GO
---Se crea el rol full access categorias Para Kira
+--Se crea el  rol lectura general Para Kira
 CREATE ROLE Lectura_General AUTHORIZATION Kira;
 GO
--- Se dan los privilegios de SELECT necesarios
-GRANT SELECT ON v_Production_Products TO ROL_CONSULTA_VENTAS
-
-GRANT SELECT ON v_Sales_Customers TO ROL_CONSULTA_VENTAS
-
-GRANT SELECT ON v_Sales_Orders TO ROL_CONSULTA_VENTAS
-
-GRANT SELECT ON v_Sales_OrderDetails TO ROL_CONSULTA_VENTAS
+-- Se Revocan los privilegios de select dentro del schema DBO en los siguientes roles
+DENY SELECT ON SCHEMA :: DBO TO Rol_Administrativo
+DENY SELECT ON SCHEMA :: DBO TO Rol_Mantenimiento_Clientes
+DENY SELECT ON SCHEMA :: DBO TO Consulta_Operaciones
+DENY SELECT ON SCHEMA :: DBO TO Lectura_General
 /*Es requerido aplicar (GRANT) todos los objetos que caigan en la gobernanza de los roles
 anteriores. (TRABAJAR EN ESTO)*/
 -- Privilegios EXEC USER SPS
-GRANT EXECUTE ON dbo.sp_AddProduct TO ROL_EXEC_USER_SPS;
-GRANT EXECUTE ON dbo.sp_totalSalesIncomebyDate TO ROL_EXEC_USER_SPS;
+/*GRANT EXECUTE ON dbo.sp_AddProduct TO ROL_EXEC_USER_SPS;
+GRANT EXECUTE ON dbo.sp_totalSalesIncomebyDate TO ROL_EXEC_USER_SPS;*/
 -- Privilegios DENY SPS
-DENY EXECUTE ON dbo.sp_AddProduct TO ROL_DENY_EXEC_USER_SPS;
-DENY EXECUTE ON dbo.sp_totalSalesIncomebyDate TO ROL_DENY_EXEC_USER_SPS;
+/*DENY EXECUTE ON dbo.sp_AddProduct TO ROL_DENY_EXEC_USER_SPS;
+DENY EXECUTE ON dbo.sp_totalSalesIncomebyDate TO ROL_DENY_EXEC_USER_SPS;*/
 --Privilegios fulla access categoria
-GRANT EXECUTE ON dbo.sp_addCategory TO ROL_FULL_ACCESS_Categoria;
+/*GRANT EXECUTE ON dbo.sp_addCategory TO ROL_FULL_ACCESS_Categoria;
 GRANT EXECUTE ON dbo.sp_updateCategory TO ROL_FULL_ACCESS_Categoria;
-GRANT EXECUTE ON dbo.sp_removeCategory TO ROL_FULL_ACCESS_Categoria;
+GRANT EXECUTE ON dbo.sp_removeCategory TO ROL_FULL_ACCESS_Categoria;*/
 
-ALTER ROLE ROL_CONSULTA_VENTAS 
+ALTER ROLE Rol_Administrativo 
 ADD MEMBER Thomas
-ALTER ROLE ROL_EXEC_USER_SPS
-ADD MEMBER Thomas
-ALTER ROLE ROL_DENY_EXEC_USER_SPS
+GO
+ALTER ROLE Rol_Mantenimiento_Clientes
+ADD MEMBER Eri
+GO
+ALTER ROLE Consulta_Operaciones
 ADD MEMBER Samos
-ALTER ROLE ROL_FULL_ACCESS_Categoria
+GO
+ALTER ROLE Lectura_General
 ADD MEMBER Kira
+GO
+/*Grant selects on views for General read-only role*/
+GRANT SELECT ON v_Tipo_Persona TO Lectura_General
+GO
+GRANT SELECT ON v_Formacion_Educativa TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Mecanismo TO Lectura_General
+GO
+
+GRANT SELECT ON v_Categoria TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Identificacion TO Lectura_General
+GO
+
+GRANT SELECT ON v_Identificacion TO Lectura_General
+GO
+
+GRANT SELECT ON v_Persona TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Estado_Persona TO Lectura_General
+GO
+
+GRANT SELECT ON v_Persona_Tipo TO Lectura_General
+GO
+
+GRANT SELECT ON v_Estado_Persona TO Lectura_General 
+GO
+
+GRANT SELECT ON v_Mecanismo_Contacto TO Lectura_General
+GO
+
+GRANT SELECT ON v_Moneda TO Lectura_General
+GO
+
+GRANT SELECT ON v_Agencia TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Geografia TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Ingreso TO Lectura_General
+GO
+
+GRANT SELECT ON v_Ingreso TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Direccion TO Lectura_General
+GO
+
+GRANT SELECT ON v_Direccion TO Lectura_General
+GO
+
+GRANT SELECT ON v_Geografia TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Relacion TO Lectura_General
+GO
+
+GRANT SELECT ON v_Relacion TO Lectura_General
+GO
+
+GRANT SELECT ON v_Sitio_Web TO Lectura_General
+GO
+
+GRANT SELECT ON v_Naturaleza_Industria TO Lectura_General 
+GO
+
+GRANT SELECT ON v_Industria_Persona TO Lectura_General
+GO
+
+GRANT SELECT ON v_Garantia TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Operacion_Crediticia TO Lectura_General
+GO
+
+GRANT SELECT ON v_Estado_Operacion_Crediticia TO Lectura_General
+GO
+
+GRANT SELECT ON v_Estado_Movimiento TO Lectura_General
+GO
+
+GRANT SELECT ON v_Tipo_Movimiento TO Lectura_General
+GO
+
+GRANT SELECT ON v_Operacion_Crediticia TO Lectura_General
+GO
+
+GRANT SELECT ON v_Movimiento TO Lectura_General
+GO
+
+GRANT SELECT ON v_Garantia_Operacion_Crediticia TO Lectura_General
+GO
