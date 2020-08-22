@@ -160,6 +160,17 @@ SELECT
 FROM Direccion
 GO
 
+CREATE VIEW v_Geografia WITH SCHEMABINDING AS
+
+SELECT 
+
+	ID 
+	,Nombre 
+	,FK_GeografiaID 
+	,FK_Tipo_Geografia_ID 
+FROM Geografia
+GO
+
 CREATE VIEW v_Tipo_Relacion WITH SCHEMABINDING AS
 
 SELECT 
